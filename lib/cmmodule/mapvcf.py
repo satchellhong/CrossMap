@@ -9,7 +9,7 @@ from cmmodule.utils import update_chromID,revcomp_DNA
 from cmmodule.utils import map_coordinates
 from cmmodule.meta_data import __version__
 
-def crossmap_vcf_file(mapping, infile, outfile, liftoverfile, refgenome, noCompAllele = False, compress = False):
+def crossmap_vcf_file(mapping, infile, outfile, liftoverfile, refgenome, noCompAllele = False, compress = False, putchr = 0):
 	'''
 	Convert genome coordinates in VCF format.
 
@@ -61,7 +61,7 @@ def crossmap_vcf_file(mapping, infile, outfile, liftoverfile, refgenome, noCompA
 	total = 0
 	fail = 0
 	withChr = False # check if the VCF data lines use 'chr1' or '1'
-
+	
 	for line in ireader.reader(infile):
 		if not line.strip():
 			continue
@@ -96,8 +96,14 @@ def crossmap_vcf_file(mapping, infile, outfile, liftoverfile, refgenome, noCompA
 			print(line, file=UNMAP)
 		elif line.startswith('##contig'):
 			print(line, file=UNMAP)
-			if 'ID=chr' in line:
+			if putchr==1:
 				withChr = True
+			elif putchr==2:
+				withChr = False
+			else:
+				if 'ID=chr' in line:
+					withChr = True
+			
 
 		#update contig information
 		elif line.startswith('#CHROM'):
@@ -164,6 +170,14 @@ def crossmap_vcf_file(mapping, infile, outfile, liftoverfile, refgenome, noCompA
 
 				if a[1][3] == '-':
 					fields[4] = revcomp_DNA(fields[4], True)
+
+				# put or remove chr to chromosome
+				if fields[0].startswith('chr'):
+					if putchr==2:
+						fields[0] = fields[0].replace('chr','')
+				else:
+					if putchr==1:
+						fields[0] = 'chr'+fields[0]
 
 				# check if ref_allele is the same as alt_allele
 				if noCompAllele:

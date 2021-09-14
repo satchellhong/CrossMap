@@ -200,7 +200,9 @@ if __name__=='__main__':
 			parser.add_option("--compress", action="store_true",dest="compression", help=
 							"If set, compress the output VCF file by calling the system \"gzip\".")
 			parser.add_option("--chr", type=int, default=0, dest="putchr", help=
-							"If set, put chr in front of each chromosome.")
+							"""0: normal,
+							1: put 'chr' in front of each chromosome,
+							2: remove 'chr' in front of each chromosome""")
 			(options,args)=parser.parse_args()
 
 			if options.no_comp_alleles is None:
@@ -212,7 +214,7 @@ if __name__=='__main__':
 				genome_file = args[3]
 				out_file = args[4]
 				(mapTree, targetChromSizes, sourceChromSizes) = read_chain_file(chain_file)
-				crossmap_vcf_file(mapping = mapTree, infile= in_file, outfile = out_file, liftoverfile = chain_file, refgenome = genome_file, noCompAllele = options.no_comp_alleles, compress = options.compression)
+				crossmap_vcf_file(mapping = mapTree, infile= in_file, outfile = out_file, liftoverfile = chain_file, refgenome = genome_file, noCompAllele = options.no_comp_alleles, compress = options.compression, putchr = options.putchr)
 			else:
 				parser.print_help()
 				sys.exit(0)
