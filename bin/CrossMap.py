@@ -6,7 +6,11 @@ Supports BED/BedGraph, GFF/GTF, BAM/SAM/CRAM, BigWig/Wig, VCF, and MAF format fi
 -------------------------------------------------------------------------------------
 '''
 
+import os
 import sys
+file_path = os.path.realpath(__file__)
+abs_path = '/'.join(file_path.split('/')[:-2])
+sys.path.append(abs_path+'/lib/')
 import optparse
 import pyBigWig
 import logging
@@ -195,6 +199,8 @@ if __name__=='__main__':
 							"If set, CrossMap does NOT check if the reference allele is different from the alternate allele.")
 			parser.add_option("--compress", action="store_true",dest="compression", help=
 							"If set, compress the output VCF file by calling the system \"gzip\".")
+			parser.add_option("--chr", type=int, default=0, dest="putchr", help=
+							"If set, put chr in front of each chromosome.")
 			(options,args)=parser.parse_args()
 
 			if options.no_comp_alleles is None:
