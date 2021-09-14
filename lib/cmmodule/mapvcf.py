@@ -167,9 +167,11 @@ def crossmap_vcf_file(mapping, infile, outfile, liftoverfile, refgenome, noCompA
 				# update END if any
 				fields[7] = re.sub('END\=\d+','END='+str(target_end),fields[7])
 
-
 				if a[1][3] == '-':
+					print(a)
+					print(fields[:7])
 					fields[4] = revcomp_DNA(fields[4], True)
+					print(fields[4])
 
 				# put or remove chr to chromosome
 				if fields[0].startswith('chr'):

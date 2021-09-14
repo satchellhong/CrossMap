@@ -69,14 +69,18 @@ def revcomp_DNA(dna, extended=True):
 		complement = {'A':'T','C':'G','G':'C','T':'A','N':'N','X':'X'}
 
 	seq = dna.replace(' ','').upper()
-	if ',' not in seq:
-		return ''.join([complement[base] for base in reversed(seq)])
-	else:
-		seqs = seq.split(',')
-		comp_seqs = []
-		for s in seqs:
-			comp_seqs.append(''.join([complement[base] for base in reversed(s)]))
-		return ','.join(comp_seqs)
+
+	try:
+		if ',' not in seq:
+			return ''.join([complement[base] for base in reversed(seq)])
+		else:
+			seqs = seq.split(',')
+			comp_seqs = []
+			for s in seqs:
+				comp_seqs.append(''.join([complement[base] for base in reversed(s)]))
+			return ','.join(comp_seqs)
+	except:
+		return seq
 
 def wiggleReader( f ):
 	'''
